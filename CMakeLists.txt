@@ -4,7 +4,7 @@ project(ConfigParser)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_compile_options(-g -O2 -Wall -Werror)
+add_compile_options(-g -O2 -Wall)
 
 include_directories(./)
 

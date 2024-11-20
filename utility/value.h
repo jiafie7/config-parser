@@ -22,13 +22,13 @@ namespace melon
         };
 
         Value();
-        explicit Value(bool value);
-        explicit Value(int value);
-        explicit Value(unsigned int value);
-        explicit Value(float value);
-        explicit Value(double value);
-        explicit Value(const char* value);
-        explicit Value(const std::string& value);
+        Value(bool value);
+        Value(int value);
+        Value(unsigned int value);
+        Value(float value);
+        Value(double value);
+        Value(const char* value);
+        Value(const std::string& value);
         ~Value() = default;
 
         void show() const;
