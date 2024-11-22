@@ -21,7 +21,7 @@ git clone https://github.com/jiafie7/config-parser.git
 cd config-parser
 ```
 
-2. Build the Project
+3. Build the Project
 
 ```bash
 mkdir build
