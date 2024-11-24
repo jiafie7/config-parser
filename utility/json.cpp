@@ -73,9 +73,56 @@ Json::Json(const Json& other)
   copy(other); 
 }
 
-
 Json::~Json()
 {
+  clear();
+}
+
+Json& Json::operator=(bool value)
+{
+  clear();
+  m_type = json_bool;
+  m_value.m_bool = value;
+  return *this;
+}
+     
+Json& Json::operator=(int value)
+{
+  clear();
+  m_type = json_int;
+  m_value.m_int = value;
+  return *this;
+}
+
+Json& Json::operator=(double value)
+{
+  clear();
+  m_type = json_double;
+  m_value.m_double = value;
+  return *this;
+}
+
+Json& Json::operator=(const char* value)
+{
+  clear();
+  m_type = json_string;
+  m_value.m_string = new std::string(value);
+  return *this;
+}
+
+Json& Json::operator=(const std::string& value)
+{
+  clear();
+  m_type = json_string;
+  m_value.m_string = new std::string(value);
+  return *this;
+}
+
+Json& Json::operator=(const Json& other)
+{
+  clear();
+  copy(other);
+  return *this;
 }
 
 std::string Json::str() const
@@ -258,4 +305,170 @@ Json::operator std::string() const
   return *(m_value.m_string);
 }
 
+Json::DataType Json::getType() const
+{
+  return m_type;
+}
+
+bool Json::isNull() const
+{
+  return m_type == json_null;
+}
+
+bool Json::isBool() const
+{
+  return m_type == json_bool;
+}
+
+bool Json::isInt() const
+{
+  return m_type == json_int;
+}
+
+bool Json::isDouble() const
+{
+  return m_type == json_double;
+}
+
+bool Json::isString() const
+{
+  return m_type == json_string;
+}
+
+bool Json::isArray() const
+{
+  return m_type == json_array;
+}
+
+bool Json::isObject() const
+{
+  return m_type == json_object;
+}
+
+void Json::append(const Json& value)
+{
+  if (m_type != json_array)
+  {
+    clear();
+    m_type = json_array;
+    m_value.m_array = new std::vector<Json>();
+  }
+  (m_value.m_array)->push_back(value);
+}
+       
+bool Json::has(int index)
+{
+  if (m_type != json_array)
+    return false;
+  return index >= 0 && index < (m_value.m_array)->size();
+}
+
+Json Json::get(int index)
+{
+  if (!has(index))
+    return Json();
+  return (m_value.m_array)->at(index);
+}
+
+void Json::remove(int index)
+{
+  if (m_type != json_array)
+    throw std::logic_error("Type error: not array.");
+  (m_value.m_array)->at(index).clear();
+  (m_value.m_array)->erase((m_value.m_array)->begin() + index);
+}
+
+Json& Json::operator[](int index)
+{
+  if (m_type != json_array)
+    throw std::logic_error("Type error: not array.");
+  if (!has(index))
+    throw std::logic_error("Array out of range.");
+  return (m_value.m_array)->at(index);
+}
+
+bool Json::has(const char* key)
+{
+  if (m_type != json_object)
+    return false;
+  return (m_value.m_object)->find(key) != (m_value.m_object)->end();
+}
+        
+bool Json::has(const std::string& key)
+{
+  return has(key.c_str());
+}
+
+Json Json::get(const char* key)
+{
+  if (!has(key))
+    return Json();
+  return (*(m_value.m_object))[key];
+}
+
+Json Json::get(const std::string& key)
+{
+  return get(key.c_str());
+}
+
+void Json::remove(const char* key)
+{
+  if (m_type != json_object)
+    return;
+
+  auto it = (m_value.m_object)->find(key);
+  if (it == (m_value.m_object)->end())
+    return;
+  it->second.clear();
+  (m_value.m_object)->erase(it);
+}
+
+void Json::remove(const std::string& key)
+{
+  remove(key.c_str());
+}
+
+Json& Json::operator[](const char* key)
+{
+  if (m_type != json_object)
+  {
+    clear();
+    m_type = json_object;
+    m_value.m_object = new std::map<std::string, Json>();
+  }
+  return (*(m_value.m_object))[key];
+}
+
+Json& Json::operator[](const std::string& key)
+{
+  return (*this)[key.c_str()];
+}
+
+int Json::size() const
+{
+  switch (m_type)
+  {
+    case json_array:
+      return (m_value.m_array)->size();
+    case json_object:
+      return (m_value.m_object)->size();
+    default: break;
+  }
+  return -1;
+}
+        
+bool Json::empty() const
+{
+  switch (m_type)
+  {
+    case json_null:
+      return true;
+    case json_array:
+      return (m_value.m_array)->empty();
+    case json_object:
+      return (m_value.m_object)->empty();
+    default: break;
+  }
+  return false;
+}
 

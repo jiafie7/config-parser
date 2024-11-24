@@ -29,15 +29,33 @@ int main()
   std::cout << v4 << '\n';
   std::cout << v5 << '\n';
 
-  Json num = "sss";
-  Json j1;
-  j1 = num;
-  std::cout << num << '\n';
-  std::cout << j1 << '\n';
-  num.clear();
-  std::cout << num << '\n';
-  std::cout << j1 << '\n';
+  // array
+  Json v;
+  v.append(v1);
+  v.append(b);
+  v.append(i);
+  v.append(d);
+  v.append(s);
+  
+  std::cout << v << '\n';
+  std::cout << v.has(3) << ' ' << v.has(5) << '\n';
+  std::cout << v.get(3) << ' ' << v[4] << '\n';
+  
+  v.remove(0);
+  std::cout << v << '\n';
 
+  // object
+  Json ob;
+  std::cout << ob.has("as") << '\n';
+  std::cout << ob["as"] << '\n';
+  ob["name"] = "Michael";
+  ob["age"] = 17;
+  std::cout << ob.has("name") << ' ' << ob.has("age") << '\n';
+  std::cout << ob["name"] << ' ' << ob.get("age") << '\n';
+  ob.remove("age");
+  std::cout << ob.has("age") << ' ' << ob["age"] << '\n';
+
+  
 
   return 0;
 }

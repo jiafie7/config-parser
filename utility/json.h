@@ -34,6 +34,13 @@ namespace melon
         Json(const Json& other);
         ~Json();
 
+        Json& operator=(bool value);
+        Json& operator=(int value);
+        Json& operator=(double value);
+        Json& operator=(const char* value);
+        Json& operator=(const std::string& value);
+        Json& operator=(const Json& other);
+
         friend std::ostream& operator<<(std::ostream& os, const Json& other)
         {
           os << other.str();
@@ -49,10 +56,59 @@ namespace melon
         operator std::string();
         operator std::string() const;
 
-        void clear();
+        DataType getType() const;
+        bool isNull() const;
+        bool isBool() const;
+        bool isInt() const;
+        bool isDouble() const;
+        bool isString() const;
+        bool isArray() const;
+        bool isObject() const;
+
+        // array
+        void append(const Json& value);
+        bool has(int index);
+        Json get(int index);
+        void remove(int index);
+        Json& operator[](int index);
+        
+        typedef std::vector<Json>::iterator array_iterator;
+        array_iterator arrayBegin()
+        {
+          return (m_value.m_array)->begin();
+        }
+        array_iterator arrayEnd()
+        {
+          return (m_value.m_array)->end();
+        }
+
+
+        // object
+        bool has(const char* key);
+        bool has(const std::string& key);
+        Json get(const char* key);
+        Json get(const std::string& key);
+        void remove(const char* key);
+        void remove(const std::string& key);
+        Json& operator[](const char* key);
+        Json& operator[](const std::string& key);
+
+        typedef std::map<std::string, Json>::iterator object_iterator;
+        object_iterator objectBegin()
+        {
+          return (m_value.m_object)->begin();
+        }
+        object_iterator objectEnd()
+        {
+          return (m_value.m_object)->end();
+        }
+
+        int size() const;
+        bool empty() const;
 
       private:
         std::string str() const;
+        void clear();
         void copy(const Json& other);
 
       private:
