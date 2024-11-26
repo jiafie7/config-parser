@@ -103,6 +103,88 @@ Role = Admin
 - Key-value pairs are formatted as `key = value`.
 - Comments begin with `#` or `;`.
 
+# Json File Parser
+
+A lightweight and efficient C++ library for parsing and manipulating JSON files.
+
+## Features
+
+- **JSON Value Types**: Supports all standard JSON value types, Null, Boolean, Number, String, Array, Object.
+- **JSON File Parsing**: Reads JSON files and parses them into corresponding in-memory structures.
+
+## Usage
+
+1. Example code
+
+````c
+#include <iostream>
+
+#include "utility/json.h"
+#include "utility/json_parser.h"
+
+using namespace melon::utility;
+
+int main()
+{
+
+  JsonParser parser;
+  parser.load("./../data.json");
+  Json data = parser.parse();
+  std::cout << data << '\n';
+
+  std::cout << data.get("code") << '\n';
+  std::cout << data["message"] << '\n';
+
+  std::cout << data["language"] << '\n';
+  data["language"].append("Spanish");
+  std::cout << data["language"] << '\n';
+
+  std::cout << data["data"] << '\n';
+  std::cout << data["data"]["photo"] << '\n';
+  data["data"].remove("photo");
+  std::cout << data["data"] << '\n';
+
+  return 0;
+}```
+
+2. Run the Example
+
+```bash
+./jsonParser
+````
+
+3. Output
+
+```bash
+{"code":123,"data":{"email_verified":1,"isLogin":true,"photo":"https://p5.itc.cn/q_70/images01/20210417/72ee06e84779415b947272df4dfec1f1.jpeg"},"language":["Chineses","English"],"message":"welcome!"}
+123
+"welcome!"
+["Chineses","English"]
+["Chineses","English","Spanish"]
+{"email_verified":1,"isLogin":true,"photo":"https://p5.itc.cn/q_70/images01/20210417/72ee06e84779415b947272df4dfec1f1.jpeg"}
+"https://p5.itc.cn/q_70/images01/20210417/72ee06e84779415b947272df4dfec1f1.jpeg"
+{"email_verified":1,"isLogin":true}
+```
+
+## API Reference
+
+### Json Class
+
+- void append(const Json& value): Appends a value to a JSON array.
+- bool has(int index): Check whether index i in the array is valid.
+- Json get(int index): Query the element with index i in the array.
+- void remove(int index): Removes the element at index i from the array.
+- Json& operator[](int index): Query the element with index i in the array.
+- bool has(const std::string& key): Check whether key in the object is exist.
+- Json get(const std::string& key): Query the element with key in the obeject.
+- void remove(const std::string& key): Removes the key-value with key from the object.
+- Json& operator[](const std::string& key): Query the element with key in the object.
+
+### JsonParser Class
+
+- void load(const std::string& filename): Load a JSON file.
+- Json parse(): Parses a JSON file and returns a Json object.
+
 ## Contributing
 
 Contributions are welcome! Please follow these steps:
