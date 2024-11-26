@@ -75,3 +75,71 @@ bool JsonParser::inRange(int x, int lower, int upper) const
   return (x >= lower) && (x <= upper);
 }
 
+Json JsonParser::parseNull()
+{
+  if (m_content.compare(m_index, 4, "null") == 0)
+  {
+    m_index += 4;
+    return Json();
+  }
+  throw std::logic_error("Parse Null error!\n");
+}
+ 
+Json JsonParser::parseBool()
+{
+  if (m_content.compare(m_index, 4, "true") == 0)
+  {
+    m_index += 4;
+    return Json(true);
+  }
+  else if (m_content.compare(m_index, 5, "false") == 0)
+  {
+    m_index += 5;
+    return Json(false);
+  }
+  throw std::logic_error("Parse bool error!\n");
+}
+
+Json JsonParser::parseNumber()
+{
+  int pos = m_index;
+ 
+  if (m_content[m_index] == '0')
+    m_index ++ ;
+  else if (inRange(m_content[m_index], '1', '9'))
+  {
+    m_index ++ ;
+    while (inRange(m_content[m_index], '0', '9'))
+      m_index ++ ;
+  }
+  else 
+    throw std::logic_error("Invalid character in number.");
+
+  if (m_content[m_index] != '.')
+    return Json(std::atoi(m_content.c_str() + pos));
+
+  m_index ++ ;
+  if (!inRange(m_content[m_index], '0', '9'))
+     throw std::logic_error("Invalid float number.");
+  
+  while (inRange(m_content[m_index], '0', '9'))
+    m_index ++ ;
+
+  return Json(std::atof(m_content.c_str() + pos));
+}
+
+std::string JsonParser::parseString()
+{
+  return "";
+}
+
+Json JsonParser::parseArray()
+{
+    return Json();
+}
+
+Json JsonParser::parseObject()
+{
+  return Json();
+}
+

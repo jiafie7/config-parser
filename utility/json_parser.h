@@ -25,6 +25,13 @@ namespace melon
         char getNextChar();
         bool inRange(int x, int lower, int upper) const;
 
+        Json parseNull();
+        Json parseBool();
+        Json parseNumber();
+        std::string parseString();
+        Json parseArray();
+        Json parseObject();
+
 
       private:
         std::string m_content;

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "utility/json.h"
+#include "utility/json_parser.h"
 
 using namespace melon::utility;
 
@@ -54,8 +55,12 @@ int main()
   std::cout << ob["name"] << ' ' << ob.get("age") << '\n';
   ob.remove("age");
   std::cout << ob.has("age") << ' ' << ob["age"] << '\n';
-
   
+  JsonParser parser;
+  std::string str = "123 456";
+  parser.load(str.c_str(), str.size());
+  Json null = parser.parse();
+  std::cout << null << '\n';  
 
   return 0;
 }
