@@ -73,6 +73,11 @@ Json::Json(const Json& other)
   copy(other); 
 }
 
+Json::Json(Json&& other)
+{
+  swap(other);
+}
+
 Json::~Json()
 {
   clear();
@@ -122,6 +127,12 @@ Json& Json::operator=(const Json& other)
 {
   clear();
   copy(other);
+  return *this;
+}
+
+Json& Json::operator=(Json&& other) noexcept
+{
+  swap(other);
   return *this;
 }
 
@@ -355,7 +366,7 @@ void Json::append(const Json& value)
   }
   (m_value.m_array)->push_back(value);
 }
-       
+    
 bool Json::has(int index)
 {
   if (m_type != json_array)
@@ -470,5 +481,33 @@ bool Json::empty() const
     default: break;
   }
   return false;
+}
+
+// void Json::parse(const std::string& filename)
+// {
+//   clear();
+//   JsonParser parser;
+//   parser.load(filename);
+//   *this = parser.parse();
+// }
+//         
+// void Json::parse(const char* buf, int len)
+// {
+//   clear();
+//   JsonParser parser;
+//   parser.load(buf, len);
+//   *this = parser.parse();
+// }
+
+void Json::swap(Json& other)
+{
+  DataType type = other.m_type;
+  Value value = other.m_value;
+
+  other.m_type = m_type;
+  other.m_value = m_value;
+
+  m_type = type;
+  m_value = value;
 }
 

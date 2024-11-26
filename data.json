@@ -1,0 +1,10 @@
+{
+  "code": 123,
+  "message": "welcome!",
+  "language": ["Chineses", "English"],
+  "data": {
+    "isLogin": true,
+    "email_verified": 1,
+    "photo": "https://p5.itc.cn/q_70/images01/20210417/72ee06e84779415b947272df4dfec1f1.jpeg"
+  }
+}

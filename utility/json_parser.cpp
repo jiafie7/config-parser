@@ -130,16 +130,87 @@ Json JsonParser::parseNumber()
 
 std::string JsonParser::parseString()
 {
-  return "";
+  int pos = m_index;
+  while (true)
+  {
+    char ch = getNextChar();
+    if (ch == '"')
+      break;
+
+    if (ch == '\\')
+    {
+      ch = getNextChar();
+      switch (ch)
+      {
+        case 'b':
+        case 't':
+        case 'n':
+        case 'f':
+        case 'r':
+        case '"':
+        case '\\':
+          break;
+        case 'u':
+          m_index += 4;
+          break;
+        default: break;
+      }
+    }
+  }
+  return m_content.substr(pos, m_index - pos - 1);
 }
 
 Json JsonParser::parseArray()
 {
-    return Json();
+    Json arr(Json::json_array);
+
+    char ch = getNextChar();
+    if (ch == ']')
+      return arr;
+
+    m_index -- ;
+    while (true)
+    {
+      arr.append(parse());
+      char ch = getNextChar();
+      if (ch == ']')
+        break;
+
+      if (ch != ',')
+        throw std::logic_error("Expected ',' in array.");
+    }
+    return arr;
 }
 
 Json JsonParser::parseObject()
 {
-  return Json();
+  Json obj(Json::json_object);
+
+  char ch = getNextChar();
+  if (ch == '}')
+    return obj;
+
+  m_index -- ;
+  while (true)
+  {
+    char ch = getNextChar();
+    if (ch != '"')
+      throw std::logic_error("Invalid object key.");
+    std::string key = parseString();
+
+    ch = getNextChar();
+    if (ch != ':')
+      throw std::logic_error("Expected ':' in object."); 
+
+    obj[key] = parse();
+
+    ch = getNextChar();
+    if (ch == '}')
+      break;
+    
+    if (ch != ',')
+      throw std::logic_error("Expected ',' in object.");
+  }
+  return obj;
 }
 

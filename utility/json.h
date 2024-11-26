@@ -32,6 +32,7 @@ namespace melon
         Json(const char* value);
         Json(const std::string& value);
         Json(const Json& other);
+        Json(Json&& other);
         ~Json();
 
         Json& operator=(bool value);
@@ -40,6 +41,7 @@ namespace melon
         Json& operator=(const char* value);
         Json& operator=(const std::string& value);
         Json& operator=(const Json& other);
+        Json& operator=(Json&& other) noexcept;
 
         friend std::ostream& operator<<(std::ostream& os, const Json& other)
         {
@@ -105,11 +107,15 @@ namespace melon
 
         int size() const;
         bool empty() const;
+        
+        // void parse(const std::string& filename);
+        // void parse(const char* buf, int len);
 
       private:
         std::string str() const;
         void clear();
         void copy(const Json& other);
+        void swap(Json& other);
 
       private:
         union Value
