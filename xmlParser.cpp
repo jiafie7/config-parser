@@ -1,5 +1,6 @@
 #include <iostream>
 #include "utility/xml.h"
+#include "utility/xml_parser.h"
 
 using namespace melon::utility;
 
@@ -35,7 +36,24 @@ int main()
   for(auto it = xml.begin(); it != xml.end(); ++ it)
     std::cout << *it << '\n';
 
-  xml.save("./../info.xml");
+  std::cout << "--------------------------------------------" << '\n';
+
+  XmlParser parser;
+  parser.load("./../info.xml");
+  
+  Xml content = parser.parse();
+
+  std::string name = content["student"]["name"].getText();
+  std::cout << "name=" << name << std::endl;
+
+  int id = content["student"].getAttribute("id");
+  std::cout << "id=" << id << std::endl;
+
+  std::string age = content["student"]["age"].getText();
+  std::cout << "age=" << age << std::endl;
+
+  for (auto it = content.begin(); it != content.end(); it++)
+    std::cout << *it << std::endl;
 
   return 0;
 }
