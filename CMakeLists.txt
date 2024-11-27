@@ -12,5 +12,6 @@ file(GLOB_RECURSE SOURCES "./utility/*.cpp")
 
 add_executable(iniParser ${SOURCES} iniParser.cpp)
 add_executable(jsonParser ${SOURCES} jsonParser.cpp)
+add_executable(xmlParser ${SOURCES} xmlParser.cpp)
 
 
