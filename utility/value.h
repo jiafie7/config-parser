@@ -54,6 +54,12 @@ namespace melon
         operator double() const;
         operator std::string();
         operator std::string() const;
+        
+        friend std::ostream & operator << (std::ostream & os, const Value & value)
+        {
+          os << value.m_value;
+          return os;
+        }
 
       private:
         ValueType m_type;
