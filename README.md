@@ -105,12 +105,22 @@ Role = Admin
 
 # Project 2. Json File Parser
 
-A lightweight and efficient C++ library for parsing and manipulating JSON files.
+A lightweight and efficient C++ library for parsing and manipulating JSON files.This project provides two core classes:
+
+1. Json Class: Represents a JSON value with support for primitive types, arrays, and objects.
+2. JsonParser Class: Handles the parsing of JSON files and strings into Json objects.
 
 ## Features
 
-- **JSON Value Types**: Supports all standard JSON value types, Null, Boolean, Number, String, Array, Object.
-- **JSON File Parsing**: Reads JSON files and parses them into corresponding in-memory structures.
+- JSON Value Representation
+
+  - **JSON Value Types**: Supports all standard JSON value types, Null, Boolean, Number, String, Array, Object.
+  - **Array Operations**: Append, access, and remove elements by index, iterate over elements using iterators.
+  - **Object Operations**: Add, access, and remove key-value pairs, iterate over key-value pairs using iterators.
+  - **Serialization**: Convert the Json object to a string representation
+
+- JSON Parsing
+  - **Load and Parse**: Load JSON content from a file or a string buffer, parse the content into a Json object.
 
 ## Usage
 
@@ -171,20 +181,21 @@ int main()
 
 ### Json Class
 
-- void append(const Json& value): Appends a value to a JSON array.
-- bool has(int index): Check whether index i in the array is valid.
-- Json get(int index): Query the element with index i in the array.
-- void remove(int index): Removes the element at index i from the array.
-- Json& operator[](int index): Query the element with index i in the array.
-- bool has(const std::string& key): Check whether key in the object is exist.
-- Json get(const std::string& key): Query the element with key in the obeject.
-- void remove(const std::string& key): Removes the key-value with key from the object.
-- Json& operator[](const std::string& key): Query the element with key in the object.
+- void append(const Json& value): Append an element to an array.
+- bool has(int index): Check an index in the array is valid.
+- Json get(int index): Access an element in an array by index.
+- Json& operator[](int index): Access an element in an array by index.
+- void remove(int index): Removes an element at index i from an array.
+- bool has(const std::string& key): Check an element in an object is exist.
+- Json get(const std::string& key): Access an element in an obeject by key.
+- Json& operator[](const std::string& key): Access an element in an object by key.
+- void remove(const std::string& key): Removes an element from an object by key.
+- std::string str() const: Convert the JSON value to a string.
 
 ### JsonParser Class
 
-- void load(const std::string& filename): Load a JSON file.
-- Json parse(): Parses a JSON file and returns a Json object.
+- void load(const std::string& filename): Load JSON content from a file.
+- Json parse(): Parse the loaded content into a Json object.
 
 # Project 3. XML File Parser
 
