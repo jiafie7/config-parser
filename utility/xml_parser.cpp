@@ -89,10 +89,6 @@ Xml XmlParser::parseElement()
 
   while (m_content[m_index] != '\0')
   {
-    // >
-    //  />
-    // age = "17"
-    // 
     skipWhiteSpace();
     if (m_content[m_index] == '/')
     {
@@ -143,6 +139,7 @@ Xml XmlParser::parseElement()
       std::string value = parseAttrVal();
       element.addAttribute(key, value);
     }
+    skipWhiteSpace();
   }
 
   return element;
@@ -201,7 +198,3 @@ std::string XmlParser::parseAttrVal()
   m_index ++ ;
   return m_content.substr(pos, m_index - pos - 1);
 }
-
-
-
-

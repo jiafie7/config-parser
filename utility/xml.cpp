@@ -15,6 +15,11 @@ Xml::Xml(const Xml& other)
   copy(other);
 }
 
+Xml::Xml(Xml&& other)
+{
+  swap(other);
+}
+
 Xml::~Xml()
 {
   clear();
@@ -25,6 +30,14 @@ Xml& Xml::operator=(const Xml& other)
   if (this == &other)
     return *this;
   copy(other);
+  return *this;
+}
+
+Xml& Xml::operator=(Xml&& other) noexcept
+{
+  if (this == &other)
+    return *this;
+  swap(other);
   return *this;
 }
 
@@ -78,6 +91,11 @@ void Xml::addAttribute(const std::string& key, const std::string& value)
 void Xml::appendChild(const Xml& child)
 {
   m_children.push_back(child);
+}
+
+void Xml::appendChild(Xml&& child)
+{
+  m_children.push_back(std::move(child));
 }
 
 void Xml::removeChild(int index)
@@ -148,11 +166,52 @@ std::string Xml::toString() const
 
   for (auto it = m_children.begin(); it != m_children.end(); ++ it)
     oss << it->toString();
-
-  oss << m_text;
-
+  
+  oss << trimText(m_text);
+ 
   oss << "</" << m_name << ">";
   
+  return oss.str();
+}
+
+std::string Xml::toString(int depth) const 
+{
+  if (m_name.empty())
+    return "";
+
+  std::ostringstream oss;
+
+  std::string indent(depth * 2, ' ');
+  oss << indent << "<" << m_name;
+
+  for (const auto& attr : m_attributes)
+    oss << " " << attr.first << "=\"" << attr.second << "\"";
+
+  if (m_children.empty() && trimText(m_text).empty()) 
+  {
+    oss << "/>\n";
+  }
+  else 
+  {
+    oss << ">";
+
+    if (!m_children.empty()) 
+    {
+      oss << "\n";
+      for (const auto& child : m_children)
+        oss << child.toString(depth + 1);
+      if (!trimText(m_text).empty())
+        oss << std::string((depth + 1) * 2, ' ') << trimText(m_text) << "\n";
+      oss << indent;
+    } 
+    else if (!trimText(m_text).empty()) 
+    {
+      oss << trimText(m_text);
+    }
+
+    oss << "</" << m_name << ">\n";
+  }
+
   return oss.str();
 }
 
@@ -166,7 +225,41 @@ void Xml::save(const std::string& filename)
   ofs.close();
 }
 
+std::string Xml::trimText(const std::string& text) 
+{
+  auto start = text.begin();
+  auto end = text.end();
 
+  while (start != end && std::isspace(*start))
+    ++ start;
+  
+  do {
+    -- end;
+  } while (std::distance(start, end) > 0 && std::isspace(*end));
 
+  return std::string(start, end + 1);
+}
 
+std::string Xml::trimText(const std::string& text) const
+{
+  auto start = text.begin();
+  auto end = text.end();
 
+  while (start != end && std::isspace(*start))
+    ++ start;
+
+  do {
+    -- end;
+  } while (std::distance(start, end) > 0 && std::isspace(*end));
+
+  return std::string(start, end + 1);
+}
+
+void Xml::swap(Xml& other)
+{
+  clear();
+  m_name.swap(other.m_name);
+  m_text.swap(other.m_text);
+  m_attributes.swap(other.m_attributes);
+  m_children.swap(other.m_children);
+}

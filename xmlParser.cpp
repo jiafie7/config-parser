@@ -6,54 +6,22 @@ using namespace melon::utility;
 
 int main()
 {
-  Xml xml("students");
-  std::cout << xml.getName() << '\n';
-
-  xml.addAttribute("name", "Michael");
-  xml.addAttribute("age", "18");
-  std::cout << xml.getAttribute("age") << '\n';
-
-  Xml x1("student");
-  x1.addAttribute("age", "17");
-  x1.setText("Jack");
-
-  Xml x2("student");
-  x2.addAttribute("age", "19");
-  x2.setText("Maria");
-
-  Xml x3("student");
-  x3.addAttribute("age", "21");
-  x3.setText("Jane");
-  
-  xml.appendChild(x1);
-  xml.appendChild(x2);
-  xml.appendChild(x3);
-  std::cout << xml << '\n';
-
-  xml.removeChild(1);
-  std::cout << xml << '\n';
-
-  for(auto it = xml.begin(); it != xml.end(); ++ it)
-    std::cout << *it << '\n';
-
-  std::cout << "--------------------------------------------" << '\n';
-
   XmlParser parser;
-  parser.load("./../info.xml");
+  parser.load("./../menu.xml");
   
-  Xml content = parser.parse();
+  Xml menu = parser.parse();
 
-  std::string name = content["student"]["name"].getText();
-  std::cout << "name=" << name << std::endl;
+  std::string name = menu["food"]["name"].getText();
+  std::cout << "name=" << name << '\n';
 
-  int id = content["student"].getAttribute("id");
-  std::cout << "id=" << id << std::endl;
+  std::string price = menu["food"]["price"].getText();
+  std::cout << "price=" << price << '\n';
 
-  std::string age = content["student"]["age"].getText();
-  std::cout << "age=" << age << std::endl;
+  int calories = menu["food"]["name"].getAttribute("calories");
+  std::cout << "calories=" << calories << '\n';
 
-  for (auto it = content.begin(); it != content.end(); it++)
-    std::cout << *it << std::endl;
+  for (auto it = menu.begin(); it != menu.end(); it++)
+    std::cout << *it;
 
   return 0;
 }
