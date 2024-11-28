@@ -45,7 +45,7 @@ namespace melon
 
         friend std::ostream& operator<<(std::ostream& os, const Json& other)
         {
-          os << other.str();
+          os << other.toString();
           return os;
         }
 
@@ -67,7 +67,7 @@ namespace melon
         bool isArray() const;
         bool isObject() const;
 
-        // array
+        // array manipulation
         void append(const Json& value);
         bool has(int index);
         Json get(int index);
@@ -84,8 +84,7 @@ namespace melon
           return (m_value.m_array)->end();
         }
 
-
-        // object
+        // object manipulation
         bool has(const char* key);
         bool has(const std::string& key);
         Json get(const char* key);
@@ -112,7 +111,7 @@ namespace melon
         // void parse(const char* buf, int len);
 
       private:
-        std::string str() const;
+        std::string toString(int indent_level = 0) const; 
         void clear();
         void copy(const Json& other);
         void swap(Json& other);

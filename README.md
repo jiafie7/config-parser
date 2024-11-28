@@ -117,7 +117,7 @@ A lightweight and efficient C++ library for parsing and manipulating JSON files.
   - **JSON Value Types**: Supports all standard JSON value types, Null, Boolean, Number, String, Array, Object.
   - **Array Operations**: Append, access, and remove elements by index, iterate over elements using iterators.
   - **Object Operations**: Add, access, and remove key-value pairs, iterate over key-value pairs using iterators.
-  - **Serialization**: Convert the Json object to a string representation
+  - **Serialization**: Convert the Json object to a string with customizable indentation levels.
 
 - JSON Parsing
   - **Load and Parse**: Load JSON content from a file or a string buffer, parse the content into a Json object.
@@ -136,7 +136,6 @@ using namespace melon::utility;
 
 int main()
 {
-
   JsonParser parser;
   parser.load("./../data.json");
   Json data = parser.parse();
@@ -167,14 +166,40 @@ int main()
 3. Output
 
 ```bash
-{"code":123,"data":{"email_verified":1,"isLogin":true,"photo":"https://p5.itc.cn/q_70/images01/20210417/72ee06e84779415b947272df4dfec1f1.jpeg"},"language":["Chineses","English"],"message":"welcome!"}
+{
+  "code": 123,
+  "data": {
+    "email_verified": 1,
+    "isLogin": true,
+    "photo": "https://p5.itc.cn/q_70/images01/20210417/72ee06e84779415b947272df4dfec1f1.jpeg"
+  },
+  "language": [
+    "Chineses",
+    "English"
+  ],
+  "message": "welcome!"
+}
 123
 "welcome!"
-["Chineses","English"]
-["Chineses","English","Spanish"]
-{"email_verified":1,"isLogin":true,"photo":"https://p5.itc.cn/q_70/images01/20210417/72ee06e84779415b947272df4dfec1f1.jpeg"}
+[
+  "Chineses",
+  "English"
+]
+[
+  "Chineses",
+  "English",
+  "Spanish"
+]
+{
+  "email_verified": 1,
+  "isLogin": true,
+  "photo": "https://p5.itc.cn/q_70/images01/20210417/72ee06e84779415b947272df4dfec1f1.jpeg"
+}
 "https://p5.itc.cn/q_70/images01/20210417/72ee06e84779415b947272df4dfec1f1.jpeg"
-{"email_verified":1,"isLogin":true}
+{
+  "email_verified": 1,
+  "isLogin": true
+}
 ```
 
 ## API Reference
@@ -190,7 +215,7 @@ int main()
 - Json get(const std::string& key): Access an element in an obeject by key.
 - Json& operator[](const std::string& key): Access an element in an object by key.
 - void remove(const std::string& key): Removes an element from an object by key.
-- std::string str() const: Convert the JSON value to a string.
+- std::string toString(int indent_level = 0) const: Convert the JSON value to a string with customizable indentation levels.
 
 ### JsonParser Class
 

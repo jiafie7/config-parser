@@ -136,11 +136,12 @@ Json& Json::operator=(Json&& other) noexcept
   return *this;
 }
 
-std::string Json::str() const
+std::string Json::toString(int indent_level) const 
 {
-  std::stringstream ss; 
+  std::stringstream ss;
+  std::string indent(indent_level * 2, ' '); // 每层缩进两个空格
 
-  switch (m_type)
+  switch (m_type) 
   {
     case json_null:
       ss << "null";
@@ -157,29 +158,34 @@ std::string Json::str() const
     case json_string:
       ss << "\"" << *(m_value.m_string) << "\"";
       break;
-    case json_array:
-      ss << "[";
-      for (auto it = (m_value.m_array)->begin(); it != (m_value.m_array)->end(); ++ it)
+    case json_array: 
+    {
+      ss << "[\n";
+      for (auto it = (m_value.m_array)->begin(); it != (m_value.m_array)->end(); ++it) 
       {
         if (it != (m_value.m_array)->begin())
-          ss << ",";
-        ss << (*it).str();
+          ss << ",\n";
+        ss << std::string((indent_level + 1) * 2, ' ') << (*it).toString(indent_level + 1);
       }
-      ss << "]";
+      ss << "\n" << indent << "]";
       break;
-    case json_object:
-      ss << "{";
-      for (auto it = (m_value.m_object)->begin(); it != (m_value.m_object)->end(); ++ it)
+    }
+    case json_object: 
+    {
+      ss << "{\n";
+      for (auto it = (m_value.m_object)->begin(); it != (m_value.m_object)->end(); ++it) 
       {
         if (it != (m_value.m_object)->begin())
-          ss << ",";
-        ss << "\"" << it->first << "\"" << ":" << it->second.str();
+          ss << ",\n";
+        ss << std::string((indent_level + 1) * 2, ' ') << "\"" << it->first << "\": " << it->second.toString(indent_level + 1);
       }
-      ss << "}";
+      ss << "\n" << indent << "}";
       break;
+    }
     default:
       break;
-  }
+    }
+
   return ss.str();
 }
 

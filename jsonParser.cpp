@@ -7,7 +7,6 @@ using namespace melon::utility;
 
 int main()
 {
-  
   JsonParser parser;
   parser.load("./../data.json");
   Json data = parser.parse();
@@ -24,7 +23,6 @@ int main()
   std::cout << data["data"]["photo"] << '\n';
   data["data"].remove("photo");
   std::cout << data["data"] << '\n';
-
 
   return 0;
 }
