@@ -1,14 +1,4 @@
-# Ini File Parser
-
-A lightweight and efficient INI file parser implemented in C++ for reading, writing and managing configuration files. This tool supports standard INI syntax, including section, key-value pairs, and comments.
-
-## Features
-
-- **Parse INI Files**: Read configuration files with support for sections and key-value pairs.
-- **Section and Key Management**: Add, modify, or delete sections and keys.
-- **Lightweight**: Designed with minimal dependencies and optimized for ease of use.
-
-## Getting Started
+# Getting Started
 
 1. Prerequisites
 
@@ -29,6 +19,16 @@ cd build
 cmake ..
 make
 ```
+
+# Project 1. Ini File Parser
+
+A lightweight and efficient INI file parser implemented in C++ for reading, writing and managing configuration files. This tool supports standard INI syntax, including section, key-value pairs, and comments.
+
+## Features
+
+- **Parse INI Files**: Read configuration files with support for sections and key-value pairs.
+- **Section and Key Management**: Add, modify, or delete sections and keys.
+- **Lightweight**: Designed with minimal dependencies and optimized for ease of use.
 
 ## Usage
 
@@ -103,7 +103,7 @@ Role = Admin
 - Key-value pairs are formatted as `key = value`.
 - Comments begin with `#` or `;`.
 
-# Json File Parser
+# Project 2. Json File Parser
 
 A lightweight and efficient C++ library for parsing and manipulating JSON files.
 
@@ -116,7 +116,7 @@ A lightweight and efficient C++ library for parsing and manipulating JSON files.
 
 1. Example code
 
-````c
+```c
 #include <iostream>
 
 #include "utility/json.h"
@@ -145,13 +145,14 @@ int main()
   std::cout << data["data"] << '\n';
 
   return 0;
-}```
+}
+```
 
 2. Run the Example
 
 ```bash
 ./jsonParser
-````
+```
 
 3. Output
 
@@ -185,7 +186,103 @@ int main()
 - void load(const std::string& filename): Load a JSON file.
 - Json parse(): Parses a JSON file and returns a Json object.
 
-## Contributing
+# Project 3. XML File Parser
+
+A powerful and versatile C++ library for parsing and manipulating XML files. This project provides two main classes:
+
+1. Xml Class: Represents an XML node with attributes, child nodes, and text content.
+2. XmlParser Class: Handles reading and parsing XML files into a structured Xml object.
+
+## Features
+
+- **XML Node Representation**
+
+  - **Node Name and Text Content**: Get and set the name and text content of an XML node.
+  - **Attributes**: Add, retrieve, and manage attributes by key.
+  - **Child Nodes**: Append, access, and remove child nodes using index or name.
+  - **Iteration**: Supports iteration over child nodes with standard iterators.
+  - **Serialization**: Convert the XML node to a string with customizable indentation levels.
+
+- **XML Parsing**
+  - **Load XML Content**: Load XML content from a file or a string buffer.
+  - **Parse XML Content**: Convert loaded XML content into an Xml object, representing the hierarchical structure of the XML file.
+  - **Comments and Declarations**: Skips XML comments and declarations during parsing.
+
+## Usage
+
+1. Example code
+
+```c
+#include <iostream>
+#include "utility/xml.h"
+#include "utility/xml_parser.h"
+
+using namespace melon::utility;
+
+int main()
+{
+  XmlParser parser;
+  parser.load("./../menu.xml");
+
+  Xml menu = parser.parse();
+
+  std::string name = menu["food"]["name"].getText();
+  std::cout << "name=" << name << '\n';
+
+  std::string price = menu["food"]["price"].getText();
+  std::cout << "price=" << price << '\n';
+
+  int calories = menu["food"]["name"].getAttribute("calories");
+  std::cout << "calories=" << calories << '\n';
+
+  for (auto it = menu.begin(); it != menu.end(); it++)
+    std::cout << *it;
+
+  return 0;
+}
+```
+
+2. Run the Example
+
+```bash
+./xmlParser
+```
+
+3. Output
+
+```bash
+name=Belgian Waffles
+price=$5.95
+calories=650
+<food>
+  <name calories="650">Belgian Waffles</name>
+  <price>$5.95</price>
+  <description>Two of our famous Belgian Waffles with plenty of real maple syrup</description>
+</food>
+...
+```
+
+## API Reference
+
+### Xml Class
+
+- std::string getName() const: Get the node’s name.
+- std::string getText() const: Get the node’s text content.
+- void setName(const std::string& name): Set the node’s name.
+- void setText(const std::string& text): Set the node’s text content.
+- void addAttribute(const std::string& key, const std::string& value): Add an attribute to the node.
+- Xml& operator[](const std::string& name): Access a child node by name.
+- void appendChild(const Xml& child): Append a new child node.
+- std::string toString(int depth) const: Convert the XML node to a string with customizable indentation levels.
+- void save(const std::string& filename): Save the XML structure to a file.
+
+### XmlParser Class
+
+- void load(const std::string& filename): Load XML content from a file.
+- void load(const char\* buf, int len): Load XML content from a string buffer.
+- Xml parse(): Parse the loaded XML content and return an Xml object.
+
+# Contributing
 
 Contributions are welcome! Please follow these steps:
 
